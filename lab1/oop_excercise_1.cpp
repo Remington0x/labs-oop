@@ -49,11 +49,16 @@ public:
     Rectangle &intersection(Rectangle &rec2) {
         double int_x_left, int_x_right, int_y_left, int_y_right;
         bool a, b, c, d;
-        a =
-    }
-}
+        a = is_point_on(rec.xl, rec.yr, &rec2);
+        b = is_point_on(rec.xr, rec.yr, &rec2);
+        c = is_point_on(rec.xl, rec.yl, &rec2);
+        d = is_point_on(rec.xr, rec.yl, &rec2);
 
-bool is_point_on(int x, int y, Rectangle &rec) {
+
+    }
+};
+
+bool is_point_on(double x, double y, Rectangle &rec) {
     if ((x >= rec.xl) && (x <= rec.xr) && (y >= rec.yl) && (y <= rec.yr)) {
         return true;
     } else {
