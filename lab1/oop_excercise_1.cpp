@@ -46,7 +46,19 @@ public:
         }
     }
 
-    
+    Rectangle &intersection(Rectangle &rec2) {
+        double int_x_left, int_x_right, int_y_left, int_y_right;
+        bool a, b, c, d;
+        a =
+    }
+}
+
+bool is_point_on(int x, int y, Rectangle &rec) {
+    if ((x >= rec.xl) && (x <= rec.xr) && (y >= rec.yl) && (y <= rec.yr)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 int main() {
