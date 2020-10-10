@@ -59,7 +59,7 @@ public:
                 int_x_left = rec.xl;
                 int_y_left = rec2.yl;
                 int_x_right = rec.xr;
-                int_y_right = rec.yr;
+                int_y_right = rec.yr; 
             } else
             if (c) {    //rec2 limits only on right border
                 int_x_left = rec.xl;
