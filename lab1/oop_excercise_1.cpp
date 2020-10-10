@@ -49,10 +49,70 @@ public:
     Rectangle &intersection(Rectangle &rec2) {
         double int_x_left, int_x_right, int_y_left, int_y_right;
         bool a, b, c, d;
-        a = is_point_on(rec.xl, rec.yr, &rec2);
-        b = is_point_on(rec.xr, rec.yr, &rec2);
-        c = is_point_on(rec.xl, rec.yl, &rec2);
-        d = is_point_on(rec.xr, rec.yl, &rec2);
+        a = is_point_on(rec.xl, rec.yr, &rec2); //upper left
+        b = is_point_on(rec.xr, rec.yr, &rec2); //upper right
+        c = is_point_on(rec.xl, rec.yl, &rec2); //down left
+        d = is_point_on(rec.xr, rec.yl, &rec2); //down right
+
+        if (a) {
+            if (b) {    //rec2 limits only on bottom
+                int_x_left = rec.xl;
+                int_y_left = rec2.yl;
+                int_x_right = rec.xr;
+                int_y_right = rec.yr;
+            } else
+            if (c) {    //rec2 limits only on right border
+                int_x_left = rec.xl;
+                int_y_left = rec.yl;
+                int_x_right = rec2.xr;
+                int_y_right = rec.yr;
+            } else
+            if (d) {    //that means that rec fully placed on rec2
+                int_x_left = rec.xl;
+                int_y_left = rec.yl;
+                int_x_right = rec.xr;
+                int_y_right = rec.yr;
+            } else {    //that means only a placed on the rec2
+                int_x_left = rec.xl;
+                int_y_left = rec2.yl;
+                int_x_right = rec2.xr;
+                int_y_right = rec.yr;
+            }
+        } else
+        if (b) {
+            if (c) {
+                int_x_left = rec2.xl;
+                int_y_left = rec.yl;
+                int_x_right = rec.xr;
+                int_y_right = rec.yr;
+            } else {    //only b
+                int_x_left = rec2.xl;
+                int_y_left = rec2.yl;
+                int_x_right = rec.xr;
+                int_y_right = rec.yr;
+            }
+        } else
+        if (c) {
+            if (d) {
+                int_x_left = rec.xl;
+                int_y_left = rec.yl;
+                int_x_right = rec.xr;
+                int_y_right = rec2.yr;
+            } else {    //only c
+                int_x_left = rec.xl;
+                int_y_left = rec.yl;
+                int_x_right = rec2.xr;
+                int_y_right = rec2.yr;
+            }
+        } else
+        if (d) {    //only d
+            int_x_left = rec2.xl;
+            int_y_left = rec.yl;
+            int_x_right = rec.xr;
+            int_y_right = rec2.yr;
+        } else {
+            return NULL;
+        }
 
 
     }
