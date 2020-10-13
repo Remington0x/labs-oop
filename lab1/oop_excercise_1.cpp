@@ -2,9 +2,9 @@
 
 class Rectangle {
 public:
-    Rectangle(double xl, double yl, double xr, double yr);
+    Rectangle(double Xl, double Yl, double Xr, double Yr) : xl(Xl), yl(Yl), xr(Xr), yr(Yr) {};
 
-    ~Rectangle();
+    ~Rectangle() {};
 
     //Rectangle &rec = Rectangle;
     double xl;
@@ -60,7 +60,8 @@ public:
         }
     }
 
-    Rectangle intersection(Rectangle &rec2, bool &code) {
+    Rectangle intersection(Rectangle rec2, bool &code) {
+        code = true;
         double int_x_left = 0;
         double int_x_right = 0;
         double int_y_left = 0;
@@ -72,24 +73,30 @@ public:
         d = is_point_on(xr, yl, rec2); //down right
 
         if (a) {
+            std::cout << "a is on the rec2\n";
             if (b) {    //rec2 limits only on bottom
-                int_x_left = xl;
-                int_y_left = rec2.yl;
-                int_x_right = xr;
-                int_y_right = yr;
+                std::cout << "ab is on the rec2\n";
+                if (d) {    //that means that rec fully placed on rec2
+                    std::cout << "abcd is on the rec2\n";
+                    int_x_left = xl;
+                    int_y_left = yl;
+                    int_x_right = xr;
+                    int_y_right = yr;
+                } else {
+                    int_x_left = xl;
+                    int_y_left = rec2.yl;
+                    int_x_right = xr;
+                    int_y_right = yr;
+                }
             } else
             if (c) {    //rec2 limits only on right border
+                std::cout << "ac is on the rec2\n";
                 int_x_left = xl;
                 int_y_left = yl;
                 int_x_right = rec2.xr;
                 int_y_right = yr;
-            } else
-            if (d) {    //that means that rec fully placed on rec2
-                int_x_left = xl;
-                int_y_left = yl;
-                int_x_right = xr;
-                int_y_right = yr;
             } else {    //that means only a placed on the rec2
+                std::cout << "a is on the rec2\n";
                 int_x_left = xl;
                 int_y_left = rec2.yl;
                 int_x_right = rec2.xr;
@@ -97,12 +104,15 @@ public:
             }
         } else
         if (b) {
+            std::cout << "b is on the rec2\n";
             if (c) {
+                std::cout << "bc is on the rec2\n";
                 int_x_left = rec2.xl;
                 int_y_left = yl;
                 int_x_right = xr;
                 int_y_right = yr;
             } else {    //only b
+                std::cout << "b is on the rec2\n";
                 int_x_left = rec2.xl;
                 int_y_left = rec2.yl;
                 int_x_right = xr;
@@ -110,12 +120,15 @@ public:
             }
         } else
         if (c) {
+            std::cout << "c is on the rec2\n";
             if (d) {
+                std::cout << "cd is on the rec2\n";
                 int_x_left = xl;
                 int_y_left = yl;
                 int_x_right = xr;
                 int_y_right = rec2.yr;
             } else {    //only c
+                std::cout << "c is on the rec2\n";
                 int_x_left = xl;
                 int_y_left = yl;
                 int_x_right = rec2.xr;
@@ -123,30 +136,91 @@ public:
             }
         } else
         if (d) {    //only d
+            std::cout << "d is on the rec2\n";
             int_x_left = rec2.xl;
             int_y_left = yl;
             int_x_right = xr;
+            int_y_right = rec2.yr;
+        } else
+        if (is_point_on(rec2.xl, rec2.yr, *this)) {
+            int_x_left = rec2.xl;
+            int_y_left = rec2.yl;
+            int_x_right = rec2.xr;
             int_y_right = rec2.yr;
         } else {
             code = false;
         }
 
-        Rectangle rec_int(int_x_left, int_y_left, int_x_right, int_y_right);
-        code = true;
+        std::cout << "a = " << a << " b = " << b << " c = " << c << " d = " << d << " code = " << code << std::endl;
 
-        return rec_int; 
+        Rectangle rec_int = Rectangle(int_x_left, int_y_left, int_x_right, int_y_right);
+        //code = true;
 
+        return rec_int;
+
+    }
+
+    Rectangle uni(Rectangle rec2) {
+        double uxl, uyl, uxr, uyr;
+        uxl = std::min(xl, rec2.xl);
+        uyl = std::min(yl, rec2.yl);
+        uxr = std::max(xr, rec2.xr);
+        uyr = std::max(yr, rec2.yr);
+
+        Rectangle rec_un = Rectangle(uxl, uyl, uxr, uyr);
+
+        return rec_un;
     }
 };
 
-bool is_point_on(double x, double y, Rectangle &rec) {
-    if ((x >= rec.xl) && (x <= rec.xr) && (y >= rec.yl) && (y <= rec.yr)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 int main() {
-    std::cout << "Hello, world!\n";
+    std::cout << "Enter coordinates of first rectangle in order x-left, y-left, x-right, y-right\n";
+    double xl, xr, yl, yr;
+    std::cin >> xl >> yl >> xr >> yr;
+
+    std::cout << "x-left = " << xl << " y-left = " << yl << " x-right = " << xr << " y-right = " << yr << std::endl;
+    Rectangle rec = Rectangle(xl, yl, xr, yr);
+
+    std::cout << "Square = " << rec.getSquare() << " Perimeter = " << rec.getPerimeter() << std::endl;
+
+    std::cout << "Enter values to move rectangle (x, y)\n";
+    double mvx, mvy;
+    std::cin >> mvx >> mvy;
+    rec.move(mvx, mvy);
+    std::cout << "x-left = " << rec.xl << " y-left = " << rec.yl;
+    std::cout << " x-right = " << rec.xr << " y-right = " << rec.yr << std::endl;
+
+    std::cout << "Enter values to change dimensions of rectangle (x, y)\n";
+    std::cin >> mvx >> mvy;
+    rec.changeDimensions(mvx, mvy);
+    std::cout << "x-left = " << rec.xl << " y-left = " << rec.yl;
+    std::cout << " x-right = " << rec.xr << " y-right = " << rec.yr << std::endl;
+
+    std::cout << "Enter coordinates of second rectangle in order x-left, y-left, x-right, y-right\n";
+    std::cin >> xl >> yl >> xr >> yr;
+    std::cout << "x-left = " << xl << " y-left = " << yl << " x-right = " << xr << " y-right = " << yr << std::endl;
+    Rectangle rec2 = Rectangle(xl, yl, xr, yr);
+
+    std::cout << "Square1 = " << rec.getSquare() << " Square2 = " << rec2.getSquare() << std::endl;
+    std::cout << ((rec.isSquareLarger(rec2)) ? "Square1 > Square2\n" : "Square2 >= Square1\n");
+
+    std::cout << "Perimeter1 = " << rec.getPerimeter() << " Perimeter2 = " << rec2.getPerimeter() << std::endl;
+    std::cout << ((rec.isPerimeterLarger(rec2)) ? "Perimeter1 > Perimeter2\n" : "Perimeter2 >= Perimeter1\n");
+
+    bool code;
+    Rectangle rec3 = rec.intersection(rec2, code);
+    if (code) {
+        std::cout << "Intersection coordinates:\n";
+        std::cout << "x-left = " << rec3.xl << " y-left = " << rec3.yl;
+        std::cout << " x-right = " << rec3.xr << " y-right = " << rec3.yr << std::endl;
+    } else {
+        std::cout << "intersection failed\n";
+    }
+
+    rec3 = rec.uni(rec2);
+    std::cout << "Union coordinates:\n";
+    std::cout << "x-left = " << rec3.xl << " y-left = " << rec3.yl;
+    std::cout << " x-right = " << rec3.xr << " y-right = " << rec3.yr << std::endl;
+
+    return 0;
 }
