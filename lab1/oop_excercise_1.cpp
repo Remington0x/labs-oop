@@ -134,7 +134,7 @@ public:
         Rectangle rec_int(int_x_left, int_y_left, int_x_right, int_y_right);
         code = true;
 
-        return rec_int;
+        return rec_int; 
 
     }
 };
